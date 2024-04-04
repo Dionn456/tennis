@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use App\Models\AppointmentUser;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
 {
@@ -35,7 +37,21 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $appointment = new Appointment();
+        $appointment->start = date("Y-m-d H:i:s", strtotime(($request->start) ? $request->start : date("Y-m-d H:i:s")));
+        $appointment->end = date("Y-m-d H:i:s", strtotime(($request->end) ? $request->end : date("Y-m-d H:i:s")));
+        $appointment->court_id = $request->court_id;
+        $appointment->lesson = $request->lesson;
+        $appointment->status_id = $request->status_id;
+        $appointment->save();
+
+        $user = Auth::user();
+        $appointmentUser = new AppointmentUser;
+        $appointmentUser->appointment_id = $appointment->id;
+        $appointmentUser->user_id = $user->id;
+        $appointmentUser->save();
+
+        return redirect()->back();
     }
 
     /**

@@ -14,7 +14,8 @@ class CourtController extends Controller
      */
     public function index()
     {
-        //
+        $courts = Court::all(); 
+        return response()->json($courts);
     }
 
     /**
@@ -24,7 +25,7 @@ class CourtController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
