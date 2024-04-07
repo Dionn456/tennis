@@ -20,10 +20,32 @@
       <div class="title mb-4">
         {{ title }}
       </div>
-
-      <div class="links">
-        <a href="https://github.com/cretueusebiu/laravel-vue-spa">github.com/cretueusebiu/laravel-vue-spa</a>
+      <card title="card"  class="w-100">
+        test
+      </card>
+      <div class="container mt-4">
+        <div class="row">
+          <div class="col">
+            <h1>Welkom bij Tennishallen Hengelo</h1>
+            <p>Registreer nu om toegang te krijgen tot onze tennisfaciliteiten. Al geregistreerd? Log dan in om te beginnen met spelen!</p>
+            <div class="row">
+              <div class="col-md-6">
+                <h2>Registreren</h2>
+                <!-- Registratieformulier hier toevoegen -->
+                <p>Vul het registratieformulier in om lid te worden.</p>
+                <a href="#" class="btn btn-primary">Registreren</a>
+              </div>
+              <div class="col-md-6">
+                <h2>Inloggen</h2>
+                <!-- Inlogformulier hier toevoegen -->
+                <p>Heb je al een account? Log dan hier in.</p>
+                <a href="#" class="btn btn-primary">Inloggen</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      
     </div>
   </div>
 </template>
