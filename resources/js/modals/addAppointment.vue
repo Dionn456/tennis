@@ -4,9 +4,11 @@
             <div class="mb-2 row">
                 <label class="col-md-12 mb-1">Banen</label>
                 <div class="col-md-12">
-                    <select id="rol" class="form-control mb-3" v-model="appointment.court_id">
+                    <select id="rol" class="form-control mb-3" v-model="appointment.court_id"
+                        @change="updateMinEndTime()">
                         <option v-for="court in courts" :key="court.id" :value="court.id">{{ court.name }}</option>
                     </select>
+
                 </div>
             </div>
             <div v-if="appointment.court_id" class="mb-2 row">
@@ -44,6 +46,8 @@ export default {
         return {
             loading: true,
             courts: [],
+            events: [],
+            date: '',
             appointment: {
                 start: '',
                 end: '',
@@ -56,8 +60,8 @@ export default {
     mounted() {
         const self = this;
         self.getCourts();
+        self.getAppointments();
         self.loading = false;
-
     },
     methods: {
         /**
@@ -79,15 +83,35 @@ export default {
             const self = this;
             self.$https.get('/api/courts').then(response => self.courts = response.data);
         },
+        /**
+        * Function to retrieve appointments data from the database for taken times.
+        */
+        getAppointments() {
+            const self = this;
+            self.$https.get('/api/appointments').then(response => self.appointments = response.data);
+        },
         disableTime(date) {
-            const now = new Date();
             const selectedDate = new Date(date);
-
-            if (this.appointment.end) {
-                const endTime = new Date(this.appointment.end);
-                return selectedDate < now || selectedDate < endTime;
+            const now = new Date();
+            
+            if (selectedDate < now) {
+                return true;
             }
-            return selectedDate < now;
+
+            const existingAppointments = this.appointments.filter(appointment => appointment.court_id === this.appointment.court_id);
+
+            if (existingAppointments) {
+                for (const appointment of existingAppointments) {
+                    const startTime = new Date(appointment.start);
+                    const endTime = new Date(appointment.end);
+
+                    if (selectedDate >= startTime && selectedDate < endTime) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         },
         /** 
         * Function to update the minimum end time of the appointment based on the start time.
@@ -106,17 +130,25 @@ export default {
         */
         addAppointment() {
             const self = this;
-            self.$https.post('/api/appointment', self.appointment).then(response => {
-                self.$swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: "Baan gehuurd!.",
-                    timer: 5000
-                }).then(() => {
-                    window.location.href = '/appointments';
+            self.appointment.court_id = parseInt(self.appointment.court_id);
+
+            self.$https.post('/api/appointment', self.appointment)
+                .then(response => {
+                    self.$swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: "Tennisbaan is gehuurd!",
+                        timer: 5000
+                    }).then(() => {
+                        self.$modal.hide("add-appointment");
+                        self.resetForm();
+                    });
+                })
+                .catch(error => {
+                    console.error('Error adding appointment:', error);
                 });
-            });
-        },
+        }
+
     },
     computed: {
 

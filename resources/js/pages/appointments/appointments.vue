@@ -40,10 +40,24 @@ export default {
 
         }
     },
+    mounted() {
+        const self = this;
+        self.getAppointments();
+    },
     metaInfo() {
         return { title: "Kalender" }
     },
     methods: {
+        async getAppointments() {
+            const self = this;
+            try {
+                const response = await self.$https.get('/api/appointments');
+                self.calendarOptions.events = response.data;
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+            }
+        },
+
         /**
         * Function to handle click events on dates.
         * @param {Event} event - The click event object.
@@ -59,7 +73,13 @@ export default {
                     timer: 10000
                 });
             }
-            self.$refs.add.show(event.date);
+
+            var events = self.filterEventsDay(event.date);
+            self.$refs.add.show(event, events);
+        },
+        filterEventsDay(date) {
+        const self = this;
+        return self.calendarOptions.events.filter((event) => (new Date(event.start).setHours(0, 0, 0, 0) == new Date(date).setHours(0, 0, 0, 0)) )  // && event.dentist.user_id == self.appointment.dentist.id
         },
         /**
         * Function to handle click events on events.

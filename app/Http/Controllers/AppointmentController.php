@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use App\Models\AppointmentUser;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class AppointmentController extends Controller
 {
@@ -14,9 +17,10 @@ class AppointmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        //
+        $appointments = Appointment::all(); 
+        return response()->json($appointments);
     }
 
     /**
@@ -35,11 +39,16 @@ class AppointmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
+        $start = Carbon::parse($request->start)->setTimezone('Europe/Amsterdam');
+        $end = Carbon::parse($request->end)->setTimezone('Europe/Amsterdam');
+
+        dd($start);
+
         $appointment = new Appointment();
-        $appointment->start = date("Y-m-d H:i:s", strtotime(($request->start) ? $request->start : date("Y-m-d H:i:s")));
-        $appointment->end = date("Y-m-d H:i:s", strtotime(($request->end) ? $request->end : date("Y-m-d H:i:s")));
+        $appointment->start = $start;
+        $appointment->end = $end;
         $appointment->court_id = $request->court_id;
         $appointment->lesson = $request->lesson;
         $appointment->status_id = $request->status_id;
@@ -53,6 +62,7 @@ class AppointmentController extends Controller
 
         return redirect()->back();
     }
+    
 
     /**
      * Display the specified resource.

@@ -2,7 +2,6 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-white">
     <div class="container">
       <router-link :to="{ name: user ? 'home' : 'welcome' }" class="navbar-brand">
-        <fa icon="baseballball" fixed-width />
         Tennishallen Hengelo
       </router-link>
 

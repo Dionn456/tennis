@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('courts', [CourtController::class, 'index']);
 
     Route::post('appointment', [AppointmentController::class, 'store']);
+    Route::get('appointments', [AppointmentController::class, 'index']);
 
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
