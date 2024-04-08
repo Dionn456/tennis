@@ -1,30 +1,21 @@
 <template>
-  <div class="basic-layout align-items-center justify-content-center m-0 bg-white">
-    <child />
+  <div class="main-layout">
+    <navbar />
+
+    <div>
+      <child />
+    </div>
   </div>
 </template>
 
 <script>
+import Navbar from '~/components/Navbar'
+
 export default {
-  name: 'BasicLayout'
-}
-</script>
+  name: 'MainLayout',
 
-<style lang="scss">
-.basic-layout {
-  color: #636b6f;
-  height: 100vh;
-  font-weight: 100;
-  position: relative;
-
-  .links > a {
-    color: #636b6f;
-    padding: 0 25px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: .1rem;
-    text-decoration: none;
-    text-transform: uppercase;
+  components: {
+    Navbar
   }
 }
-</style>
+</script>

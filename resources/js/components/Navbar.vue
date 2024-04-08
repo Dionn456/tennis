@@ -8,7 +8,7 @@
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto">
           <!-- Authenticated -->
-          <li v-if="user.role_id !== 4" class="nav-item mr-5">
+          <li v-if="user && user.role_id !== 4" class="nav-item mr-5">
             <router-link :to="{ name: 'appointments' }" class="nav-link" active-class="active">
               Tennis
             </router-link>

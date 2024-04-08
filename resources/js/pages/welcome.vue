@@ -1,51 +1,51 @@
 <template>
   <div>
-    <div class="top-right links">
-      <template v-if="authenticated">
-        <router-link :to="{ name: 'home' }">
-          {{ $t('home') }}
-        </router-link>
-      </template>
-      <template v-else>
-        <router-link :to="{ name: 'login' }">
-          {{ $t('login') }}
-        </router-link>
-        <router-link :to="{ name: 'register' }">
-          {{ $t('register') }}
-        </router-link>
-      </template>
-    </div>
-
-    <div class="text-center">
-      <div class="title mb-4">
-        {{ title }}
-      </div>
-      <card title="card"  class="w-100">
-        test
-      </card>
-      <div class="container mt-4">
-        <div class="row">
-          <div class="col">
-            <h1>Welkom bij Tennishallen Hengelo</h1>
-            <p>Registreer nu om toegang te krijgen tot onze tennisfaciliteiten. Al geregistreerd? Log dan in om te beginnen met spelen!</p>
-            <div class="row">
-              <div class="col-md-6">
-                <h2>Registreren</h2>
-                <!-- Registratieformulier hier toevoegen -->
-                <p>Vul het registratieformulier in om lid te worden.</p>
-                <a href="#" class="btn btn-primary">Registreren</a>
+    <div class="text-center"> <!-- content-->
+     <!--  -->
+      
+      <div id="myCarousel" class="carousel slide" data-bs-ride="carousel" >
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="/img/tennishallen.webp" class="d-block w-100" alt="Wild Landscape"/>
+            <div class="container">
+              <div class="carousel-caption text-start">
+                <h1>Baan huren?</h1>
+                <p>Registreer u hieronder om een les te boeken.</p>
+                <router-link :to="{ name: 'register' }" class="btn btn-lg btn-primary" active-class="active">
+                  Registreren
+                </router-link>
               </div>
-              <div class="col-md-6">
-                <h2>Inloggen</h2>
-                <!-- Inlogformulier hier toevoegen -->
-                <p>Heb je al een account? Log dan hier in.</p>
-                <a href="#" class="btn btn-primary">Inloggen</a>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img src="/img/les.jpg" class="d-block w-100" alt="Wild Landscape"/>
+
+            <div class="container">
+              <div class="carousel-caption text-end">
+                <h1>Another example headline.</h1>
+                <p>Some representative placeholder content for the second slide of the carousel.</p>
+                <router-link :to="{ name: 'register' }" class="btn btn-lg btn-primary" active-class="active">
+                  Registreren
+                </router-link>
               </div>
             </div>
           </div>
         </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
       </div>
-      
+
+     <!-- -->
     </div>
   </div>
 </template>
@@ -80,4 +80,17 @@ export default {
 .title {
   font-size: 85px;
 }
+
+.carousel .carousel-item {
+  height: 500px;
+}
+
+.carousel-item img {
+    position: absolute;
+    object-fit:cover;
+    top: 0;
+    left: 0;
+    min-height: 500px;
+}
+
 </style>

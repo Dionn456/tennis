@@ -25,13 +25,13 @@
           <div class="mb-3 row">
             <div class="col-md-3" />
             <div class="col-md-7 d-flex">
-              <checkbox v-model="remember" name="remember">
+              <!-- <checkbox v-model="remember" name="remember">
                 {{ $t('remember_me') }}
-              </checkbox>
+              </checkbox> -->
 
-              <router-link :to="{ name: 'password.request' }" class="small ms-auto my-auto">
+              <!-- <router-link :to="{ name: 'password.request' }" class="small ms-auto my-auto">
                 {{ $t('forgot_password') }}
-              </router-link>
+              </router-link> -->
             </div>
           </div>
 
