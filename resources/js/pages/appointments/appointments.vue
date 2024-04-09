@@ -42,22 +42,42 @@ export default {
     },
     mounted() {
         const self = this;
-        self.getAppointments();
+        this.fetchData();
+        this.getUser();
     },
     metaInfo() {
         return { title: "Kalender" }
     },
     methods: {
-        async getAppointments() {
-            const self = this;
+        async fetchData() {
             try {
-                const response = await self.$https.get('/api/appointments');
-                self.calendarOptions.events = response.data;
+                const appointmentsResponse = await this.$https.get('/api/appointmentsUser');
+                const lessonsResponse = await this.$https.get('/api/lessons');
+
+                // Modify event titles before setting to calendarOptions.events
+                const modifiedAppointments = appointmentsResponse.data.map(event => ({
+                    ...event,
+                    title: 'Gehuurd'
+                }));
+
+                const modifiedLessons = lessonsResponse.data.map(event => ({
+                    ...event,
+                    title: 'Les'
+                }));
+
+                this.calendarOptions.events = [
+                    ...modifiedAppointments,
+                    ...modifiedLessons
+                ];
             } catch (error) {
-                console.error('Error fetching appointments:', error);
+                console.error('Error fetching data:', error);
             }
         },
 
+        getUser() {
+            const self = this;
+            self.$https.get('/api/user').then(response => self.user = response.data);
+        },
         /**
         * Function to handle click events on dates.
         * @param {Event} event - The click event object.
@@ -75,11 +95,18 @@ export default {
             }
 
             var events = self.filterEventsDay(event.date);
-            self.$refs.add.show(event, events);
+            try {
+                if (self.user != 1) {
+                    self.$refs.add.show(event, events);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+
         },
         filterEventsDay(date) {
-        const self = this;
-        return self.calendarOptions.events.filter((event) => (new Date(event.start).setHours(0, 0, 0, 0) == new Date(date).setHours(0, 0, 0, 0)) )  // && event.dentist.user_id == self.appointment.dentist.id
+            const self = this;
+            return self.calendarOptions.events.filter((event) => (new Date(event.start).setHours(0, 0, 0, 0) == new Date(date).setHours(0, 0, 0, 0)))  // && event.dentist.user_id == self.appointment.dentist.id
         },
         /**
         * Function to handle click events on events.

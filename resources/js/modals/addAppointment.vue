@@ -1,14 +1,13 @@
 <template>
-    <modal name="add-appointment" height="400">
-        <div class="py-5 px-5">
+    <modal name="add-appointment" height="500">
+        <div class="py-5 px-5" v-if="user.role_id != 1">
             <div class="mb-2 row">
                 <label class="col-md-12 mb-1">Banen</label>
                 <div class="col-md-12">
-                    <select id="rol" class="form-control mb-3" v-model="appointment.court_id"
+                    <select id="court" class="form-control mb-3" v-model="appointment.court_id"
                         @change="updateMinEndTime()">
                         <option v-for="court in courts" :key="court.id" :value="court.id">{{ court.name }}</option>
                     </select>
-
                 </div>
             </div>
             <div v-if="appointment.court_id" class="mb-2 row">
@@ -28,8 +27,10 @@
                 </div>
             </div>
             <div class="row mt-3">
-                <button type="button" class="btn btn-primary w-100" @click="addAppointment()">Baan huren</button>
+                <button v-if="user.role_id === 2" type="button" class="btn btn-primary w-100 mb-3" @click="addAppointment(true)">Les toevoegen</button>
+                <button type="button" class="btn btn-primary w-100" @click="addAppointment(false)">Baan Huren</button>
             </div>
+
         </div>
     </modal>
 </template>
@@ -48,12 +49,15 @@ export default {
             courts: [],
             events: [],
             date: '',
+            user: [],
             appointment: {
                 start: '',
                 end: '',
                 lesson: false,
                 court_id: null,
                 status_id: 1,
+                teacherId: '',
+                teacher: ''
             }
         };
     },
@@ -61,6 +65,7 @@ export default {
         const self = this;
         self.getCourts();
         self.getAppointments();
+        self.getUser();
         self.loading = false;
     },
     methods: {
@@ -83,6 +88,10 @@ export default {
             const self = this;
             self.$https.get('/api/courts').then(response => self.courts = response.data);
         },
+        getUser() {
+            const self = this;
+            self.$https.get('/api/user').then(response => self.user = response.data);
+        },
         /**
         * Function to retrieve appointments data from the database for taken times.
         */
@@ -90,10 +99,14 @@ export default {
             const self = this;
             self.$https.get('/api/appointments').then(response => self.appointments = response.data);
         },
-        disableTime(date) {
-            const selectedDate = new Date(date);
+        disableTime(datm) {
+            const self = this;
+            const selectedDate = new Date(self.date);
+            selectedDate.setHours(datm.getHours());
+            selectedDate.setMinutes(datm.getMinutes());
+            selectedDate.setSeconds(datm.getSeconds());
+
             const now = new Date();
-            
             if (selectedDate < now) {
                 return true;
             }
@@ -128,30 +141,44 @@ export default {
         /**
         * Function to add a new appointment.
         */
-        addAppointment() {
+        addAppointment(isLesson) {
             const self = this;
             self.appointment.court_id = parseInt(self.appointment.court_id);
+            self.appointment.lesson = isLesson;
+
+            var date = new Date(self.date);
+            self.appointment.start = new Date(date.setHours(self.appointment.start.getHours(), self.appointment.start.getMinutes(), 0));;
+            self.appointment.end = new Date(date.setHours(self.appointment.end.getHours(), self.appointment.end.getMinutes(), 0));
 
             self.$https.post('/api/appointment', self.appointment)
                 .then(response => {
-                    self.$swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: "Tennisbaan is gehuurd!",
-                        timer: 5000
-                    }).then(() => {
-                        self.$modal.hide("add-appointment");
-                        self.resetForm();
-                    });
+                    if (self.appointment.lesson === true) {
+                        self.$swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: "Les toegevoegd!",
+                            timer: 5000
+                        }).then(() => {
+                            self.$modal.hide("add-appointment");
+                        })
+                    } else {
+                        self.$swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: "Tennisbaan is gehuurd!",
+                            timer: 5000
+                        }).then(() => {
+                            self.$modal.hide("add-appointment");
+                        });
+                    }
+                    window.location.reload();
                 })
                 .catch(error => {
                     console.error('Error adding appointment:', error);
                 });
-        }
-
+        },
     },
     computed: {
-
     }
 }
 </script>

@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\CourtController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Models\Appointment;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +34,10 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::post('appointment', [AppointmentController::class, 'store']);
     Route::get('appointments', [AppointmentController::class, 'index']);
+    Route::get('appointmentsUser', [AppointmentController::class, 'getAppointment']);
+    Route::get('appointment/{appointmentId}', [AppointmentController::class, 'getUserAppointment']);
+    Route::put('appointment/{id}', [AppointmentController::class, 'updateStatus']);
+    Route::get('lessons', [AppointmentController::class, 'getLessons']);
 
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
