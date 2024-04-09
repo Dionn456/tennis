@@ -38,6 +38,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('appointment/{appointmentId}', [AppointmentController::class, 'getUserAppointment']);
     Route::put('appointment/{id}', [AppointmentController::class, 'updateStatus']);
     Route::get('lessons', [AppointmentController::class, 'getLessons']);
+    Route::delete('appointment/{appointmentId}', [AppointmentController::class, 'destroy']);
 
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);

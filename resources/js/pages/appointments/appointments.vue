@@ -13,7 +13,6 @@ import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 
-
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
 
@@ -37,7 +36,6 @@ export default {
                 events: [],
                 locale: 'nl'
             },
-
         }
     },
     mounted() {
@@ -54,13 +52,22 @@ export default {
                 const appointmentsResponse = await this.$https.get('/api/appointmentsUser');
                 const lessonsResponse = await this.$https.get('/api/lessons');
 
-                // Modify event titles before setting to calendarOptions.events
-                const modifiedAppointments = appointmentsResponse.data.map(event => ({
+                const currentDate = new Date();
+
+                // Filter appointments that are not in the past
+                const modifiedAppointments = appointmentsResponse.data.filter(event => {
+                    const eventDate = new Date(event.start);
+                    return eventDate >= currentDate;
+                }).map(event => ({
                     ...event,
                     title: 'Gehuurd'
                 }));
 
-                const modifiedLessons = lessonsResponse.data.map(event => ({
+                // Filter lessons that are not in the past
+                const modifiedLessons = lessonsResponse.data.filter(event => {
+                    const eventDate = new Date(event.start);
+                    return eventDate >= currentDate;
+                }).map(event => ({
                     ...event,
                     title: 'Les'
                 }));
@@ -73,7 +80,6 @@ export default {
                 console.error('Error fetching data:', error);
             }
         },
-
         getUser() {
             const self = this;
             self.$https.get('/api/user').then(response => self.user = response.data);

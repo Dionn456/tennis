@@ -60,9 +60,7 @@ class AppointmentController extends Controller
     {
         try {
             $appointment = Appointment::findOrFail($id);
-
             $appointment->status_id = $request->input('status_id', 3);
-
             $appointment->save();
 
             return response()->json(['message' => 'Appointment status updated successfully', 'appointment' => $appointment]);
@@ -159,8 +157,18 @@ class AppointmentController extends Controller
      * @param  \App\Models\Appointment  $appointment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Appointment $appointment)
+    public function destroy($appointmentId)
     {
-        //
+        try {
+            $appointment = Appointment::findOrFail($appointmentId);
+            $appointment->users()->detach(); 
+            $appointment->delete();
+    
+            return response()->json(['message' => 'Appointment and related records deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Failed to delete appointment.'], 500);
+        }
     }
+    
+    
 }
