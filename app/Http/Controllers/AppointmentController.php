@@ -159,15 +159,14 @@ class AppointmentController extends Controller
      */
     public function destroy($appointmentId)
     {
-        try {
-            $appointment = Appointment::findOrFail($appointmentId);
-            $appointment->users()->detach(); 
-            $appointment->delete();
-    
-            return response()->json(['message' => 'Appointment and related records deleted successfully']);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to delete appointment.'], 500);
-        }
+        $appointmentUser = AppointmentUser::where('appointment_id', $appointmentId)->firstOrFail();
+        $appointmentUser->delete();
+
+        $appointment = Appointment::where('id', $appointmentId)->firstOrFail();
+        $appointment->delete();
+
+        return response()->json(['message' => 'AppointmentUser deleted successfully']);
+
     }
     
     

@@ -26,7 +26,7 @@
                     <span>docentnaam</span>
                 </div>
 
-                <div class="mb-4 border-bottom" v-if="appointments.lesson == false">
+                <div class="mb-4 border-bottom" v-if="appointments.lesson == false || appointments.status_id === 3">
                     <label class="fw-bold">Lid:</label>
                     <span>lidnaam</span>
                 </div>
@@ -68,13 +68,14 @@ export default {
     data() {
         return {
             loading: true,
-            appointments: {},
+            appointments: [],
             event: {},
         };
     },
     mounted() {
         const self = this;
         self.loading = false;
+        self.getAppointment(event.id);
     },
     methods: {
         /**
@@ -114,7 +115,7 @@ export default {
                 if (self.appointments) {
                     if (self.appointments.lesson) {
                         self.appointments.status_id = 1;
-                        await self.updateAppointmentStatus(self.appointments.id, self.appointments.status_id);
+                        await self.updateAppointmentStatus(self.appointments.id);
                     } else {
                         await self.deleteAppointment(self.appointments.id);
                     }
@@ -129,38 +130,38 @@ export default {
             if (confirm('Weet je zeker dat je de afspraak wilt verwijderen?')) {
                 self.$https.delete(`/api/appointment/${appointmentId}`)
                     .then(response => {
-                        const index = self.appointments.findIndex(appointment => appointment.id === appointmentId);
-                        if (index !== -1) {
-                            self.appointments.splice(index, 1);
-                        }
-
                         self.$swal.fire({
                             icon: 'success',
-                            title: 'Succesvol!',
-                            text: 'Afspraak verwijderd.',
+                            title: 'Success!',
+                            text: 'Afspraak succesvol verwijderd.',
                             timer: 3000
                         });
+                        self.$modal.hide('view-appointment');
                     })
                     .catch(error => {
-                        console.error('Fout bij het verwijderen van de afspraak:', error);
+                        console.error('Fout bij verwijderen afspraak:', error);
                         self.$swal.fire({
                             icon: 'error',
                             title: 'Fout!',
-                            text: 'Afspraak kon niet worden verwijderd.',
-                            timer: 3000
+                            text: error.message || 'Afspraak kon niet worden verwijderd.'
                         });
                     });
+                setTimeout(function () {
+                    window.location.reload();
+                }, 3000);
             }
         },
-        async updateAppointmentStatus(appointmentId, newStatusId) {
+
+
+        async updateAppointmentStatus(appointmentId) {
             const response = await this.$https.put(`/api/appointment/${appointmentId}`, {
-                status_id: newStatusId
+                status_id: 3
             });
         },
         showChangeAppointmentModal() {
             this.$modal.show('change-appointment');
         }
-        
+
     },
     computed: {
 
