@@ -24,17 +24,20 @@ export default {
             court: {},
         };
     },
+    // Fetches court data based on route params when the component is mounted
     mounted() {
         const self = this
         self.fetchCourt();
     },
     methods: {
+        // Fetches specific court data based on route params
         fetchCourt() {
             const self = this;
             self.$https.get(`/api/courts/${self.$route.params.id}`).then(async (response) => {
                 self.court = response.data;
             });
         },
+        // Sends updated court data to the API and shows success message
         updateCourt() {
             const self = this;
             self.$https.post(`/api/courts/${self.court.id}`, self.court);
@@ -46,12 +49,14 @@ export default {
                 timer: 3000
             })
         },
+        // Navigates to specified route with optional route parameters
         navigateTo(name, id = null) {
             if (id) this.$router.push({ name, params: { id } });
             else this.$router.push({ name });
         },
     },
     computed: {
+        // This computed property is not used in this component but could be useful for formatting purposes
         formattedBirthDate() {
             return this.user.birth_date.slice(0, 10);
         }
