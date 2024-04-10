@@ -23,12 +23,12 @@
 
                 <div class="mb-4 border-bottom" v-if="appointments.lesson == true">
                     <label class="fw-bold">Docent:</label>
-                    <span>docentnaam</span>
+                    <span>{{ appointments.teacher.user.name }}</span>
                 </div>
 
                 <div class="mb-4 border-bottom" v-if="appointments.lesson == false || appointments.status_id === 3">
                     <label class="fw-bold">Lid:</label>
-                    <span>lidnaam</span>
+                    <span>{{ appointments.member.user.name }}</span>
                 </div>
 
                 <div class="mb-4 border-bottom" v-if="appointments.court">
@@ -38,14 +38,15 @@
                 </div>
             </div>
 
-            <button v-if="appointments.lesson == true && appointments.status_id != 3" type="button"
-                class="btn btn-primary mb-2" @click="joinLesson">
+            <button v-if="appointments.lesson == true && appointments.status_id != 3 && appointments.teacher.user_id != user.id" type="button"
+                class="btn btn-primary mb-2" @click="updateAppointmentUser(3)">
                 Meedoen
             </button>
 
-            <button type="button" class="btn btn-danger mb-2" @click="quit">Annuleren</button>
-            <button type="button" class="btn btn-warning mb-2" @click="showChangeAppointmentModal">Aanpassen</button>
-            <changeAppointment ref="change" />
+            <button v-if="appointments.lesson == true && appointments.member.user_id == user.id && appointments.teacher.user_id != user.id" type="button" class="btn btn-danger mb-2" @click="updateAppointmentUser(1)">Stoppen</button>
+            <button v-if="appointments.lesson == false || appointments.teacher.user_id == user.id" type="button" class="btn btn-danger mb-2" @click="deleteAppointment()">Annuleren</button>
+            <!-- <button type="button" class="btn btn-warning mb-2" @click="showChangeAppointmentModal">Aanpassen</button> -->
+            <!-- <changeAppointment ref="change" /> -->
 
             <button type="button" class="btn btn-secondary" @click="$modal.hide('view-appointment')">
                 Sluiten
@@ -56,6 +57,7 @@
 
 
 <script>
+import { mapGetters } from 'vuex'
 import DatePicker from 'vue2-datepicker';
 
 import changeAppointment from './changeAppointment.vue';
@@ -109,26 +111,25 @@ export default {
                 console.error('Error updating appointment status:', error);
             }
         },
-        async quit() {
+        /*
+            remove / add user depending on status_id (id parameter)
+        */
+        async updateAppointmentUser(id) { 
             const self = this;
-            try {
-                if (self.appointments) {
-                    if (self.appointments.lesson) {
-                        self.appointments.status_id = 1;
-                        await self.updateAppointmentStatus(self.appointments.id);
-                    } else {
-                        await self.deleteAppointment(self.appointments.id);
-                    }
-                }
-            } catch (error) {
-                console.error('Error updating or deleting appointment:', error);
-            }
+
+            const response = await this.$https.post(`/api/appointment/${self.appointments.id}/users`, {
+                status_id: id
+            }).then(() => {
+                self.getAppointment(self.appointments.id);
+            })
+
+
         },
-        deleteAppointment(appointmentId) {
+        deleteAppointment() {
             const self = this;
 
             if (confirm('Weet je zeker dat je de afspraak wilt verwijderen?')) {
-                self.$https.delete(`/api/appointment/${appointmentId}`)
+                self.$https.delete(`/api/appointment/${self.appointments.id}`)
                     .then(response => {
                         self.$swal.fire({
                             icon: 'success',
@@ -151,21 +152,14 @@ export default {
                 }, 3000);
             }
         },
-
-
-        async updateAppointmentStatus(appointmentId) {
-            const response = await this.$https.put(`/api/appointment/${appointmentId}`, {
-                status_id: 3
-            });
-        },
         showChangeAppointmentModal() {
             this.$modal.show('change-appointment');
         }
 
     },
-    computed: {
-
-    }
+    computed: mapGetters({
+        user: 'auth/user'
+    })
 }
 
 

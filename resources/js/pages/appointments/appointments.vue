@@ -9,6 +9,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import FullCalendar from '@fullcalendar/vue'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
@@ -41,7 +43,6 @@ export default {
     mounted() {
         const self = this;
         this.fetchData();
-        this.getUser();
     },
     metaInfo() {
         return { title: "Kalender" }
@@ -80,10 +81,6 @@ export default {
                 console.error('Error fetching data:', error);
             }
         },
-        getUser() {
-            const self = this;
-            self.$https.get('/api/user').then(response => self.user = response.data);
-        },
         /**
         * Function to handle click events on dates.
         * @param {Event} event - The click event object.
@@ -102,7 +99,7 @@ export default {
 
             var events = self.filterEventsDay(event.date);
             try {
-                if (self.user != 1) {
+                if (self.user.role_id != 1) {
                     self.$refs.add.show(event, events);
                 }
             } catch (error) {
@@ -124,8 +121,9 @@ export default {
             self.$refs.view.show(event.event);
         },
     },
-    computed: {
-    }
+    computed: mapGetters({
+        user: 'auth/user'
+    }),
 }
 </script>
 

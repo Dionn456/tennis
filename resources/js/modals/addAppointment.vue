@@ -1,6 +1,6 @@
 <template>
     <modal name="add-appointment" height="500">
-        <div class="py-5 px-5" v-if="user.role_id != 1">
+        <div class="py-5 px-5">
             <div class="mb-2 row">
                 <label class="col-md-12 mb-1">Banen</label>
                 <div class="col-md-12">
@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import DatePicker from 'vue2-datepicker';
 
 export default {
@@ -49,7 +51,6 @@ export default {
             courts: [],
             events: [],
             date: '',
-            user: [],
             appointment: {
                 start: '',
                 end: '',
@@ -65,7 +66,6 @@ export default {
         const self = this;
         self.getCourts();
         self.getAppointments();
-        self.getUser();
         self.loading = false;
     },
     methods: {
@@ -87,10 +87,6 @@ export default {
         getCourts() {
             const self = this;
             self.$https.get('/api/courts').then(response => self.courts = response.data);
-        },
-        getUser() {
-            const self = this;
-            self.$https.get('/api/user').then(response => self.user = response.data);
         },
         /**
         * Function to retrieve appointments data from the database for taken times.
@@ -178,8 +174,9 @@ export default {
                 });
         },
     },
-    computed: {
-    }
+    computed: mapGetters({
+        user: 'auth/user'
+    }),
 }
 </script>
 

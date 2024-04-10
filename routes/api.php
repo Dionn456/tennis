@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\AppointmentUserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OAuthController;
@@ -43,6 +44,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::delete('courts/{court}', [CourtController::class, 'destroy']);
 
 
+    Route::post('appointment/{appointment}/users', [AppointmentUserController::class, 'update']);
     Route::post('appointment', [AppointmentController::class, 'store']);
     Route::get('appointments', [AppointmentController::class, 'index']);
     Route::get('appointmentsUser', [AppointmentController::class, 'getAppointment']);

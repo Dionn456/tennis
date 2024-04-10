@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import DatePicker from 'vue2-datepicker';
 
 export default {
@@ -77,9 +78,9 @@ export default {
             }
         },        
     },
-    computed: {
-
-    }
+    computed: mapGetters({
+        user: 'auth/user'
+    })
 }
 
 

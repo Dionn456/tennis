@@ -11,8 +11,26 @@ class Appointment extends Model
 
     protected $with = [
         'users',
-        'court'
+        'teacher',
+        'member',
+        'court',
     ];
+
+    // get the teacher depending on the role id of the user (docent role)
+    public function teacher()
+    {
+        return $this->hasOne(AppointmentUser::class, "appointment_id", "id")->whereHas('user', function ($query) { 
+            $query->where('role_id', 2);
+        })->orderBy("created_at", "ASC");
+    }
+
+
+    // get the member its always the last added member in appointment_user 
+    // only when its a lesson its the teacher but then you don't show the member
+    public function member()
+    {
+        return $this->hasOne(AppointmentUser::class, "appointment_id", "id")->orderBy("created_at", "DESC");
+    }
 
     public function users()
     {
