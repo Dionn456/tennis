@@ -13,6 +13,16 @@
               Tennis
             </router-link>
           </li>
+          <li v-if="user && user.role_id == 1" class="nav-item mr-5">
+            <router-link :to="{ name: 'courts' }" class="nav-link" active-class="active">
+              Banen
+            </router-link>
+          </li>
+          <li v-if="user && user.role_id == 1" class="nav-item mr-5">
+            <router-link :to="{ name: 'users' }" class="nav-link" active-class="active">
+              Gebruikers
+            </router-link>
+          </li>
           <li v-if="user" class="nav-item dropdown mx-3">
             <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">

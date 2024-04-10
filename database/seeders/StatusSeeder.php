@@ -22,6 +22,7 @@ class StatusSeeder extends Seeder
             (object) ["code" => "invoiced", "name" => "Factuur verzonden"],
             (object) ["code" => "closed", "name" => "Gesloten"],
             (object) ["code" => "inactive", "name" => "Inactief"],
+            (object) ["code" => "active", "name" => "Actief"],
         ];
 
         foreach ($statuses as $status) {

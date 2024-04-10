@@ -18,15 +18,16 @@ class CourtSeeder extends Seeder
         Court::truncate();
 
         $courts = (array) [
-            (object) ["name" => "Novak Djokovic"],
-            (object) ["name" => "Carlos Alcaraz"],
-            (object) ["name" => "Daniil Medvedev"],
-            (object) ["name" => "Jannik Sinner"],
+            (object) ["name" => "Novak Djokovic", "status_id" => "5"],
+            (object) ["name" => "Carlos Alcaraz", "status_id" => "5"],
+            (object) ["name" => "Daniil Medvedev", "status_id" => "5"],
+            (object) ["name" => "Jannik Sinner", "status_id" => "5"],
         ];
 
         foreach ($courts as $court) {
             $db_court = new Court;
             $db_court->name = $court->name;
+            $db_court->status_id = $court->status_id;
             $db_court->save();
         }
     }

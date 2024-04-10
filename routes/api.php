@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\CourtController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Models\Appointment;
@@ -29,8 +30,18 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('logout', [LoginController::class, 'logout']);
 
     Route::get('user', [UserController::class, 'current']);
-
+    
+    Route::get('roles', [RoleController::class, 'index']);
+    Route::get('users', [UserController::class, 'index']);
+    Route::get('users/{user}', [UserController::class, 'show']);
+    Route::post('users/{user}', [UserController::class, 'update']);
+    Route::delete('users/{user}', [UserController::class, 'destroy']);
     Route::get('courts', [CourtController::class, 'index']);
+    Route::get('courts/{court}', [CourtController::class, 'show']);
+    Route::post('courts/{court}', [CourtController::class, 'update']);
+    Route::post('courts', [CourtController::class, 'store']);
+    Route::delete('courts/{court}', [CourtController::class, 'destroy']);
+
 
     Route::post('appointment', [AppointmentController::class, 'store']);
     Route::get('appointments', [AppointmentController::class, 'index']);

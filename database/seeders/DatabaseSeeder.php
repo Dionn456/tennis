@@ -18,10 +18,10 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         $this->call([
+            StatusSeeder::class,
             RoleSeeder::class,
             UserSeeder::class,
             CourtSeeder::class,
-            StatusSeeder::class,
         ]);
 
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');

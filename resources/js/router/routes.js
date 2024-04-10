@@ -12,6 +12,11 @@ export default [
   { path: '/email/verify/:id', name: 'verification.verify', component: page('auth/verification/verify.vue') },
   { path: '/email/resend', name: 'verification.resend', component: page('auth/verification/resend.vue') },
 
+  { path: '/users', name: 'users', component: page('users/users.vue') },
+  { path: '/user/:id', name: 'user', component: page('users/user.vue') },
+
+  { path: '/courts', name: 'courts', component: page('courts/courts.vue') },
+  { path: '/court/:id', name: 'court', component: page('courts/court.vue') },
   { path: '/appointments', name: 'appointments', component: page('appointments/appointments.vue') },
 
   { path: '/home', name: 'home', component: page('home.vue') },

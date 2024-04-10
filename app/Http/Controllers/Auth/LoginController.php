@@ -37,6 +37,12 @@ class LoginController extends Controller
             return false;
         }
 
+        // if user status is inactive return false
+        if ($user->status_id == 4)
+        {
+            return false;
+        }
+
         $this->guard()->setToken($token);
 
         return true;

@@ -55,6 +55,15 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
     ];
 
     /**
+     * The accessors to with to the model's array form.
+     *
+     * @var array
+     */
+    protected $with = [
+        'role',
+    ];
+
+    /**
      * Get the profile photo URL attribute.
      *
      * @return string
@@ -65,6 +74,16 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
             md5(strtolower($this->email)),
             $this->name ? urlencode("https://ui-avatars.com/api/$this->name") : 'mp',
         ]);
+    }
+
+     /**
+     * Get the oauth providers.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function role()
+    {
+        return $this->hasOne(Role::class, "id", "role_id");
     }
 
     /**

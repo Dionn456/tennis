@@ -19,10 +19,10 @@ class UserSeeder extends Seeder
         User::truncate();
 
         $users = (array) [
-            (object) ["name" => "Admin", "email" => "admin@gmail.com", "phone" => "06123456789", "password" => Hash::make('admin'), "role_id" => "1"],
-            (object) ["name" => "Ewald", "email" => "ewald@gmail.com", "phone" => "06123456789", "password" => Hash::make('test'), "role_id" => "2"],
-            (object) ["name" => "Sem", "email" => "sem@gmail.com", "phone" => "06123456789", "password" => Hash::make('test'), "role_id" => "2"],
-            (object) ["name" => "Pim", "email" => "pim@gmail.com", "phone" => "06123456789", "password" => Hash::make('test'), "role_id" => "2"],
+            (object) ["name" => "Admin", "email" => "admin@gmail.com", "phone" => "06123456789", "password" => Hash::make('admin'), "role_id" => "1", "status_id" => "5"],
+            (object) ["name" => "Ewald", "email" => "ewald@gmail.com", "phone" => "06123456789", "password" => Hash::make('test'), "role_id" => "2", "status_id" => "5"],
+            (object) ["name" => "Sem", "email" => "sem@gmail.com", "phone" => "06123456789", "password" => Hash::make('test'), "role_id" => "2", "status_id" => "5"],
+            (object) ["name" => "Pim", "email" => "pim@gmail.com", "phone" => "06123456789", "password" => Hash::make('test'), "role_id" => "2", "status_id" => "5"],
         ];
 
         foreach ($users as $user) {
@@ -32,6 +32,7 @@ class UserSeeder extends Seeder
             $db_user->phone = $user->phone;
             $db_user->password = $user->password;
             $db_user->role_id = $user->role_id;
+            $db_user->status_id = $user->status_id;
             $db_user->save();
         }
     }

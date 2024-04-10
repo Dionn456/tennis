@@ -14,7 +14,7 @@ class CourtController extends Controller
      */
     public function index()
     {
-        $courts = Court::all(); 
+        $courts = Court::where("status_id", 5)->get();
         return response()->json($courts);
     }
 
@@ -36,7 +36,13 @@ class CourtController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $court = new Court;
+        $court->name = $request->name;
+        $court->status_id = 5;
+        $court->save();
+
+        return response()->json(['message' => 'Court created successfully']);
+
     }
 
     /**
@@ -47,7 +53,7 @@ class CourtController extends Controller
      */
     public function show(Court $court)
     {
-        //
+        return response()->json($court);
     }
 
     /**
@@ -70,7 +76,10 @@ class CourtController extends Controller
      */
     public function update(Request $request, Court $court)
     {
-        //
+        $court->name = $request->name;
+        $court->save();
+
+        return response()->json(['message' => 'Court changed successfully']);
     }
 
     /**
@@ -81,6 +90,9 @@ class CourtController extends Controller
      */
     public function destroy(Court $court)
     {
-        //
+        $court->status_id = 4;
+        $court->save();
+
+        return response()->json(['message' => 'Court deleted successfully']);
     }
 }
