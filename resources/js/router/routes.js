@@ -15,6 +15,8 @@ export default [
   { path: '/users', name: 'users', component: page('users/users.vue') },
   { path: '/user/:id', name: 'user', component: page('users/user.vue') },
 
+  { path: '/invoices', name: 'invoices', component: page('invoice/invoices.vue') },
+
   { path: '/courts', name: 'courts', component: page('courts/courts.vue') },
   { path: '/court/:id', name: 'court', component: page('courts/court.vue') },
   { path: '/appointments', name: 'appointments', component: page('appointments/appointments.vue') },

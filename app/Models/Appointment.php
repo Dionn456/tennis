@@ -14,6 +14,7 @@ class Appointment extends Model
         'teacher',
         'member',
         'court',
+        'status'
     ];
 
     // get the teacher depending on the role id of the user (docent role)
@@ -40,5 +41,10 @@ class Appointment extends Model
     public function court()
     {
         return $this->hasOne(Court::class, 'id', 'court_id');
+    }
+
+    public function status()
+    {
+        return $this->hasOne(Status::class, 'id', 'status_id');
     }
 }
