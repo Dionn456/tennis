@@ -11,7 +11,8 @@ class Appointment extends Model
 
     protected $with = [
         'users',
-        'court'
+        'court',
+        'status'
     ];
 
     public function users()
@@ -22,5 +23,10 @@ class Appointment extends Model
     public function court()
     {
         return $this->hasOne(Court::class, 'id', 'court_id');
+    }
+
+    public function status()
+    {
+        return $this->hasOne(Status::class, 'id', 'status_id');
     }
 }

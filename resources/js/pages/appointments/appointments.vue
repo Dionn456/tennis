@@ -47,6 +47,7 @@ export default {
         return { title: "Kalender" }
     },
     methods: {
+        // Fetch all the appointments of the logged in user
         async fetchData() {
             try {
                 const appointmentsResponse = await this.$https.get('/api/appointmentsUser');
