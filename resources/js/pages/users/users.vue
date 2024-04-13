@@ -9,21 +9,21 @@
             </div>
         </div>
 
-        <table id="dtBasicExample" class="table table-striped table-bordered table-sm" cellspacing="0" width="100%">
+        <table class="table table-striped w-100">
             <thead>
                 <tr>
-                    <th class="th-sm">Naam</th>
-                    <th class="th-sm">Email</th>
-                    <th class="th-sm">Rol</th>
-                    <th class="th-sm text-center">Acties</th>
+                    <th scope="col">Naam</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Rol</th>
+                    <th scope="col" class="text-center">Acties</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="user in users" :key="user.id">
-                    <td class="col3">{{ user.name }}</td>
-                    <td class="col-3">{{ user.email }}</td>
-                    <td class="col-3">{{ user.role.name }}</td>
-                    <td class="col-1">
+                    <td scope="row">{{ user.name }}</td>
+                    <td >{{ user.email }}</td>
+                    <td >{{ user.role.name }}</td>
+                    <td >
                         <div class="d-flex justify-content-center gap-3">
                             <a :href="'/user/' + user.id" class="float-end">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="orange" width="20">
