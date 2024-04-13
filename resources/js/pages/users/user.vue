@@ -45,24 +45,28 @@ export default {
             roles: [],
         };
     },
+    // Fetches user data and roles when the component is mounted
     mounted() {
         const self = this
         self.fetchUser();
         self.getRoles();
     },
     methods: {
+        // Fetches specific user data based on route params
         fetchUser() {
             const self = this;
             self.$https.get(`/api/users/${self.$route.params.id}`).then(async (response) => {
                 self.user = response.data;
             });
         },
+        // Fetches all roles available
         getRoles() {
             const self = this;
             self.$https.get('/api/roles').then(async (response) => {
                 self.roles = response.data;
             });
         },
+        // Sends updated user data to the API and shows success message
         updateUser() {
             const self = this;
             self.$https.post(`/api/users/${self.user.id}`, self.user);
@@ -74,12 +78,14 @@ export default {
                 timer: 3000
             })
         },
+        // Navigates to specified route with optional route parameters
         navigateTo(name, id = null) {
             if (id) this.$router.push({ name, params: { id } });
             else this.$router.push({ name });
         },
     },
     computed: {
+        // Returns formatted birth date (YYYY-MM-DD)
         formattedBirthDate() {
             return this.user.birth_date.slice(0, 10);
         }
