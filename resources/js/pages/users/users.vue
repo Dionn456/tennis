@@ -12,6 +12,7 @@
         <table class="table table-striped w-100">
             <thead>
                 <tr>
+                    <th scope="col">#</th>
                     <th scope="col">Naam</th>
                     <th scope="col">Email</th>
                     <th scope="col">Rol</th>
@@ -20,7 +21,8 @@
             </thead>
             <tbody>
                 <tr v-for="user in users" :key="user.id">
-                    <td scope="row">{{ user.name }}</td>
+                    <td scope="row">{{ user.id }}</td>
+                    <td >{{ user.name }}</td>
                     <td >{{ user.email }}</td>
                     <td >{{ user.role.name }}</td>
                     <td >
