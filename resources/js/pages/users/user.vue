@@ -38,6 +38,8 @@
 
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
     data() {
         return {
@@ -48,6 +50,10 @@ export default {
     // Fetches user data and roles when the component is mounted
     mounted() {
         const self = this
+
+        // check user has role admin if not navigate to welcome (homepage)
+        if (self.user.role_id !== 1) self.navigateTo('welcome');
+
         self.fetchUser();
         self.getRoles();
     },
@@ -88,7 +94,10 @@ export default {
         // Returns formatted birth date (YYYY-MM-DD)
         formattedBirthDate() {
             return this.user.birth_date.slice(0, 10);
-        }
+        },
+        ...mapGetters({
+            user: 'auth/user'
+        }),
     }
 };
 

@@ -44,6 +44,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import addCourt from '../../modals/addCourt.vue';
 
 export default {
@@ -57,6 +58,10 @@ export default {
     components: { addCourt },
     mounted() {
         const self = this;
+
+        // check user has role admin if not navigate to welcome (homepage)
+        if (self.user.role_id !== 1) self.navigateTo('welcome');
+
         self.fetchCourt();
     },
     methods: {
@@ -70,6 +75,7 @@ export default {
             const self = this;
             self.$https.get('/api/courts').then(response => self.courts = response.data);
         },
+        // Navigates to specified route with optional route parameters
         navigateTo(name, id = null) {
             if (id) this.$router.push({ name, params: { id } });
             else this.$router.push({ name });
@@ -108,7 +114,10 @@ export default {
                 return court.id == self.search.toLowerCase() ||
                     court.name.toLowerCase().includes(self.search.toLowerCase())
             });
-        }
+        },
+        ...mapGetters({
+            user: 'auth/user'
+        }),
     }
 }
 </script>

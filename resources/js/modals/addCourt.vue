@@ -54,6 +54,7 @@ export default {
                 });
             });
         },
+        // Navigates to specified route with optional route parameters
         navigateTo(name, id = null) {
             if (id) this.$router.push({ name, params: { id } });
             else this.$router.push({ name });

@@ -18,6 +18,8 @@
 
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
     data() {
         return {
@@ -27,6 +29,11 @@ export default {
     // Fetches court data based on route params when the component is mounted
     mounted() {
         const self = this
+
+        // check user has role admin if not navigate to welcome (homepage)
+        if (self.user.role_id !== 1) self.navigateTo('welcome');
+
+
         self.fetchCourt();
     },
     methods: {
@@ -59,7 +66,10 @@ export default {
         // This computed property is not used in this component but could be useful for formatting purposes
         formattedBirthDate() {
             return this.user.birth_date.slice(0, 10);
-        }
+        },
+        ...mapGetters({
+            user: 'auth/user'
+        }),
     }
 };
 

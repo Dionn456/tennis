@@ -46,6 +46,9 @@
 </template>
 
 <script>
+
+import { mapGetters } from 'vuex';
+
 export default {
     data() {
         return {
@@ -57,9 +60,18 @@ export default {
     components: {},
     mounted() {
         const self = this;
+
+        // check user has role admin if not navigate to welcome (homepage)
+        if (self.user.role_id !== 1) self.navigateTo('welcome');
+
         self.fetchUser();
     },
     methods: {
+        // Navigates to specified route with optional route parameters
+        navigateTo(name, id = null) {
+            if (id) this.$router.push({ name, params: { id } });
+            else this.$router.push({ name });
+        },
         /* Method to open add-user modal */
         openModal() {
             const self = this;
@@ -105,7 +117,10 @@ export default {
                     user.email.toLowerCase().includes(self.search.toLowerCase()) ||
                     user.role.name.toLowerCase().includes(self.search.toLowerCase());
             });
-        }
+        },
+        ...mapGetters({
+            user: 'auth/user'
+        }),
     }
 }
 </script>
